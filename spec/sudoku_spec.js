@@ -6,71 +6,74 @@
 
   Sudoku = require('../sudoku');
 
-  unsolved = '619030040270061008000047621486302079000014580031009060005720806320106057160400030';
+  unsolved = new Sudoku('619030040270061008000047621486302079000014580031009060005720806320106057160400030');
 
-  solved = '619238745274561398853947621486352179792614583531879264945723816328196457167485932';
+  solved = new Sudoku('619238745274561398853947621486352179792614583531879264945723816328196457167485932');
 
   describe('a new Sudoku game', function() {
     it('reads a puzzle string where unfilled spaces are zeros', function() {
-      var sudoku;
-      sudoku = new Sudoku(unsolved);
-      return expect(sudoku.position(3)).toBe(0);
+      return expect(unsolved.position(3)).toBe(0);
     });
     it('can tell if the puzzle is solved', function() {
-      var sudoku;
-      sudoku = new Sudoku(solved);
-      return expect(sudoku.solved()).toBe(true);
+      return expect(solved.solved()).toBe(true);
+    });
+    it('can tell if the puzzle is unsolved', function() {
+      return expect(unsolved.solved()).toBe(false);
     });
     it('can tell if a set is solved', function() {
-      var sudoku;
-      sudoku = new Sudoku(solved);
-      return expect(sudoku.setSolved([6, 1, 9, 2, 3, 8, 7, 4, 5])).toBe(true);
+      return expect(solved.setSolved([6, 1, 9, 2, 3, 8, 7, 4, 5])).toBe(true);
     });
     it('can get a specified row', function() {
-      var expected, row, sudoku;
-      sudoku = new Sudoku(unsolved);
+      var expected, row;
       expected = [6, 1, 9, 0, 3, 0, 0, 4, 0];
-      row = sudoku.getSet(0, sudoku.rowIndex);
+      row = unsolved.getSet(0, unsolved.rowIndex);
       return _.each(expected, function(a, i) {
         return expect(row[i]).toBe(a);
       });
     });
     it('can get a specified column', function() {
-      var column, expected, sudoku;
-      sudoku = new Sudoku(unsolved);
+      var column, expected;
       expected = [6, 2, 0, 4, 0, 0, 0, 3, 1];
-      column = sudoku.getSet(0, sudoku.columnIndex);
+      column = unsolved.getSet(0, unsolved.columnIndex);
       return _.each(expected, function(a, i) {
         return expect(column[i]).toBe(a);
       });
     });
     it('can get a specified box', function() {
-      var box, expected, sudoku;
-      sudoku = new Sudoku(unsolved);
+      var box, expected;
       expected = [6, 1, 9, 2, 7, 0, 0, 0, 0];
-      box = sudoku.getSet(0, sudoku.boxIndex);
+      box = unsolved.getSet(0, unsolved.boxIndex);
       return _.each(expected, function(a, i) {
         return expect(box[i]).toBe(a);
       });
     });
     it('can get an entries row index', function() {
-      var sudoku;
-      sudoku = new Sudoku('0');
-      return expect(sudoku.rowIndex(9)).toBe(1);
+      return expect(unsolved.rowIndex(9)).toBe(1);
     });
     it('can get an entries column index', function() {
-      var sudoku;
-      sudoku = new Sudoku('0');
-      return expect(sudoku.columnIndex(9)).toBe(0);
+      return expect(unsolved.columnIndex(9)).toBe(0);
     });
     it('can get an entries box index', function() {
-      var sudoku;
-      sudoku = new Sudoku('0');
-      return expect(sudoku.boxIndex(5)).toBe(1);
+      return expect(unsolved.boxIndex(5)).toBe(1);
     });
-    return it('can guess the first unsolved entry', function() {
-      var sudoku;
-      return sudoku = new Sudoku(unsolved);
+    it('can locate the first unsolved entry in the puzzle', function() {
+      return expect(unsolved.firstUnsolvedIndex()).toBe(3);
+    });
+    it('can get the 3 sets an entry belongs to except that entry', function() {
+      var expected, sets;
+      expected = [1, 2, 3, 4, 6, 7, 9];
+      sets = unsolved.getSets(18);
+      return _.each(expected, function(a, i) {
+        return expect(sets[i] = a);
+      });
+    });
+    return it('can get only the final etnries of a set', function() {
+      var expected, set;
+      expected = [6, 2, 4, 3, 1];
+      set = unsolved.getSet(0, unsolved.columnIndex, true);
+      return _.each(expected, function(a, i) {
+        return expect(set[i] = a);
+      });
     });
   });
 

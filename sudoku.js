@@ -16,20 +16,26 @@
     };
 
     Sudoku.prototype.solved = function() {
-      var that;
+      var result, that;
       that = this;
+      result = true;
       _.map([0, 1, 2, 3, 4, 5, 6, 7, 8], function(i) {
         if (!that.setSolved(that.getSet(i, that.rowIndex))) {
-          return false;
+          result = false;
+        }
+        if (!that.setSolved(that.getSet(i, that.columnIndex))) {
+          result = false;
+        }
+        if (!that.setSolved(that.getSet(i, that.boxIndex))) {
+          return result = false;
         }
       });
-      return true;
+      return result;
     };
 
     Sudoku.prototype.setSolved = function(set) {
       return _.reduce(set, function(memo, num) {
         return memo + num;
-        return 0;
       }) === 45;
     };
 
@@ -53,6 +59,26 @@
       boxColumn = Math.floor(i % 9 / 3);
       return boxRow * 3 + boxColumn;
     };
+
+    Sudoku.prototype.solve = function() {
+      var index;
+      return index = this.firstUnsolvedIndex();
+    };
+
+    Sudoku.prototype.firstUnsolvedIndex = function() {
+      var result;
+      result = false;
+      _.each(this.puzzle, function(a, i) {
+        if (!result && a === 0) {
+          return result = i;
+        }
+      });
+      return result;
+    };
+
+    Sudoku.prototype.eliminate_possibilities = function(index) {};
+
+    Sudoku.prototype.getSets = function(index) {};
 
     return Sudoku;
 
